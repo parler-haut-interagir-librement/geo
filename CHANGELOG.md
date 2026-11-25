@@ -4,6 +4,27 @@ All notable changes to `phil/geo` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](https://keepachangelog.com/) principles.
 
+## 0.1.1-alpha - 2026-11-25
+
+### Added
+
+- `Geocoding\Timeouts` (`timeout`, 3 seconds, and `maxDuration`, 5 seconds, by default; above zero and at most 120
+  seconds), taken last by every HTTP adapter and set on its client by `withOptions()`; `InvalidPlace::timeouts()`.
+
+### Changed
+
+- The test of a database that cannot be read leaves out the file without permissions when the tests run as a user who
+  reads it anyway, such as root in a container.
+- The development requirements ask for the latest minor of each dependency (`symfony/cache-contracts` 3.8,
+  `symfony/http-client-contracts` 3.8).
+
+### Security
+
+- The HTTP adapters sent their requests without a timeout: a slow provider held a worker until
+  `default_socket_timeout`, 60 seconds. Every call waits 3 seconds at most for a byte and lasts 5 at most by default.
+- `IpstackLocator` sent a private or reserved address to ipstack, such as a proxy's own behind a proxy the
+  application did not trust; it and `MaxMindLocator` answer `null` for one without looking it up.
+
 ## 0.1.0-alpha - 2026-11-11
 
 ### Added
